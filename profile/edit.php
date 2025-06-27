@@ -44,52 +44,82 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <?php $pageTitle = "Edit Profile"; ?>
 <?php include '../includes/header.php'; ?>
 
-<div class="container">
-    <h2>Edit Profile</h2>
-    
-    <?php if (!empty($errors)): ?>
-        <div class="alert error">
-            <?php foreach ($errors as $error): ?>
-                <p><?= $error ?></p>
-            <?php endforeach; ?>
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card shadow">
+                <div class="card-header bg-success text-white">
+                    <h2 class="h4 mb-0">Edit Profile</h2>
+                </div>
+
+                <div class="card-body">
+                    <?php if (!empty($errors)): ?>
+                        <div class="alert alert-danger">
+                            <ul class="mb-0">
+                                <?php foreach ($errors as $error): ?>
+                                    <li><?= $error ?></li>
+                                <?php endforeach; ?>
+                            </ul>
+                        </div>
+                    <?php endif; ?>
+
+                    <?php if ($success): ?>
+                        <div class="alert alert-success">
+                            Profile updated successfully!
+                        </div>
+                    <?php endif; ?>
+
+                    <form action="edit.php" method="post">
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">First Name</label>
+                                    <input type="text" class="form-control" name="first_name"
+                                        value="<?= htmlspecialchars($user['first_name']) ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Last Name</label>
+                                    <input type="text" class="form-control" name="last_name"
+                                        value="<?= htmlspecialchars($user['last_name']) ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Email*</label>
+                                    <input type="email" class="form-control" name="email"
+                                        value="<?= htmlspecialchars($user['email']) ?>" required>
+                                </div>
+                            </div>
+
+                            <div class="col-12">
+                                <div class="mb-3">
+                                    <label class="form-label">Address</label>
+                                    <textarea class="form-control" name="address" rows="3"><?= htmlspecialchars($user['address']) ?></textarea>
+                                </div>
+                            </div>
+
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="form-label">Phone</label>
+                                    <input type="text" class="form-control" name="phone"
+                                        value="<?= htmlspecialchars($user['phone']) ?>">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="d-flex justify-content-between mt-4">
+                            <a href="view.php" class="btn btn-outline-secondary">Cancel</a>
+                            <button type="submit" class="btn btn-success">Update Profile</button>
+                        </div>
+                    </form>
+                </div>
             </div>
-    <?php endif; ?>
-    
-    <?php if ($success): ?>
-        <div class="alert success">
-            <p>Profile updated successfully!</p>
         </div>
-    <?php endif; ?>
-    
-    <form action="edit.php" method="post">
-        <div class="form-group">
-            <label>First Name</label>
-            <input type="text" name="first_name" value="<?= $user['first_name'] ?>">
-        </div>
-        
-        <div class="form-group">
-            <label>Last Name</label>
-            <input type="text" name="last_name" value="<?= $user['last_name'] ?>">
-        </div>
-        
-        <div class="form-group">
-            <label>Email*</label>
-            <input type="email" name="email" value="<?= $user['email'] ?>" required>
-        </div>
-        
-        <div class="form-group">
-            <label>Address</label>
-            <textarea name="address"><?= $user['address'] ?></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label>Phone</label>
-            <input type="text" name="phone" value="<?= $user['phone'] ?>">
-        </div>
-        
-        <button type="submit" class="btn">Update Profile</button>
-        <a href="view.php" class="btn cancel">Cancel</a>
-    </form>
+    </div>
 </div>
 
 <?php include '../includes/footer.php'; ?>
