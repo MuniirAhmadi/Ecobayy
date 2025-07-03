@@ -1,40 +1,52 @@
 <?php
 require_once '../includes/config.php';
 
-
-if (isLoggedIn()) {
-    // Redirect to appropriate dashboard based on admin status
-    redirect($_SESSION['is_admin'] ? '../admin/dashboard.php' : '../profile/view.php');
-}
-
 $errors = [];
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $username = sanitizeInput($_POST['username']);
-    $password = $_POST['password'];
+// Initialize login tracking
+if (!isset($_SESSION['login_attempts'])) {
+    $_SESSION['login_attempts'] = 0;
+    $_SESSION['last_attempt_time'] = time();
+}
 
-    if (empty($username)) $errors[] = "Username is required";
-    if (empty($password)) $errors[] = "Password is required";
+$max_attempts = 5;
+$lockout_time = 60; // seconds
 
-    if (empty($errors)) {
-        $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
-        $stmt->execute([$username, $username]);
-        $user = $stmt->fetch();
+// Check for lockout
+if ($_SESSION['login_attempts'] >= $max_attempts && (time() - $_SESSION['last_attempt_time']) < $lockout_time) {
+    $errors[] = "Too many login attempts. Please try again after {$lockout_time} seconds.";
+} else {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $username = sanitizeInput($_POST['username']);
+        $password = $_POST['password'];
+        $captcha = $_POST['captcha'] ?? '';
 
-        if ($user && password_verify($password, $user['password'])) {
-            // Store user data in session
-            $_SESSION['user_id'] = $user['id'];
-            $_SESSION['username'] = $user['username'];
-            $_SESSION['is_admin'] = (bool)$user['is_admin'];  // Store admin status
-            
-            // Redirect based on admin status
-            if ($_SESSION['is_admin']) {
-                redirect('../admin/dashboard.php');
-            } else {
-                redirect('../profile/view.php');
+        if (empty($username)) $errors[] = "Username is required";
+        if (empty($password)) $errors[] = "Password is required";
+
+        // CAPTCHA check after 3 failed attempts
+        if ($_SESSION['login_attempts'] >= 3) {
+            if (empty($captcha) || strtolower($captcha) !== strtolower($_SESSION['captcha_code'])) {
+                $errors[] = "CAPTCHA verification failed";
             }
-        } else {
-            $errors[] = "Invalid username or password";
+        }
+
+        if (empty($errors)) {
+            $stmt = $pdo->prepare("SELECT * FROM users WHERE username = ? OR email = ?");
+            $stmt->execute([$username, $username]);
+            $user = $stmt->fetch();
+
+            if ($user && password_verify($password, $user['password'])) {
+                $_SESSION['login_attempts'] = 0; // reset on success
+                $_SESSION['user_id'] = $user['id'];
+                $_SESSION['username'] = $user['username'];
+                $_SESSION['is_admin'] = (bool)$user['is_admin'];
+                redirect($_SESSION['is_admin'] ? '../admin/dashboard.php' : '../profile/view.php');
+            } else {
+                $_SESSION['login_attempts']++;
+                $_SESSION['last_attempt_time'] = time();
+                $errors[] = "Invalid username or password";
+            }
         }
     }
 }
@@ -91,6 +103,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </div>
                             </div>
                             
+                            <?php if ($_SESSION['login_attempts'] >= 3): ?>
+                                <div class="mb-3">
+                                    <label for="captcha" class="form-label">Enter CAPTCHA</label>
+                                    <div class="input-group">
+                                        <img src="captcha.php" alt="CAPTCHA" class="me-2">
+                                        <input type="text" class="form-control" name="captcha" required>
+                                    </div>
+                                </div>
+                            <?php endif; ?>
+
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-success btn-lg">
                                     <i class="fas fa-sign-in-alt me-2"></i>Login
@@ -114,3 +136,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
+

@@ -51,7 +51,7 @@ if (!$imageUpload || $imageUpload['error'] !== UPLOAD_ERR_OK) {
 
 // If there are errors, redirect back with the first error
 if (!empty($errors)) {
-    redirect("../sell.php?error={$errors[0]}");
+    redirectWithFlash('../item/sell.php', $errors[0], 'alert alert-danger');
 }
 
 // Process image upload securely
@@ -74,7 +74,7 @@ switch ($imageInfo['mime']) {
         imagepng($imageResource, $targetFile, 6);
         break;
     default:
-        redirect('../sell.php?error=UploadError');
+        redirectWithFlash('../item/sell.php', $errors[0], 'alert alert-danger');
 }
 imagedestroy($imageResource);
 

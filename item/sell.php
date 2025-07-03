@@ -8,9 +8,17 @@ if (!isLoggedIn()) {
 $pageTitle = "Sell Waste";
 include '../includes/header.php';
 
+
 // Handle error messages
 $error = isset($_GET['error']) ? $_GET['error'] : null;
 ?>
+<?php if (isset($_SESSION['flash_message'])): ?>
+    <div class="<?= $_SESSION['flash_class'] ?? 'alert alert-info' ?>">
+        <?= htmlspecialchars($_SESSION['flash_message']) ?>
+    </div>
+    <?php unset($_SESSION['flash_message'], $_SESSION['flash_class']); ?>
+<?php endif; ?>
+
 <div class="container py-5">
     <div class="row justify-content-center">
         <div class="col-lg-8">
