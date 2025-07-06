@@ -19,8 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($email)) $errors[] = "Email is required";
     if (empty($password)) $errors[] = "Password is required";
     if ($password !== $confirm_password) $errors[] = "Passwords do not match";
-    if (!empty($phone) && !preg_match('/^[0-9]{10,15}$/', $phone)) {
-        $errors[] = "Phone number must be 10-15 digits";
+    if (!empty($phone) && !preg_match('/^\d{3}-\d{7}$/', $phone)) {
+        $errors[] = "Phone number must be in the format XXX-XXXXXXXXX";
     }
 
     // Check if username/email exists
@@ -30,7 +30,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (empty($errors)) {
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        
+
         $stmt = $pdo->prepare("INSERT INTO users (username, email, password, first_name, last_name, phone, address) VALUES (?, ?, ?, ?, ?, ?, ?)");
         if ($stmt->execute([$username, $email, $hashed_password, $first_name, $last_name, $phone, $address])) {
             $success = true;
@@ -45,6 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -56,9 +57,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Custom CSS -->
     <link rel="stylesheet" href="../assets/css/style.css">
 </head>
+
 <body>
     <?php include '../includes/header.php'; ?>
-    
+
     <div class="container mt-5">
         <div class="row justify-content-center">
             <div class="col-md-8 col-lg-6">
@@ -76,7 +78,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </ul>
                             </div>
                         <?php endif; ?>
-                        
+
                         <?php if ($success): ?>
                             <div class="alert alert-success">
                                 <p class="mb-0"><i class="fas fa-check-circle me-2"></i>Registration successful! Redirecting to login page...</p>
@@ -99,7 +101,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="password" class="form-label">Password*</label>
@@ -116,7 +118,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="row">
                                     <div class="col-md-6 mb-3">
                                         <label for="first_name" class="form-label">First Name</label>
@@ -133,16 +135,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
                                     </div>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="phone" class="form-label">Phone Number</label>
                                     <div class="input-group">
                                         <span class="input-group-text"><i class="fas fa-phone"></i></span>
-                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="e.g., 1234567890">
+                                        <input type="tel" class="form-control" id="phone" name="phone" placeholder="012-3456789" pattern="^\d{3}-\d{7}$" required>
                                     </div>
-                                    <small class="text-muted">Optional - 10-15 digits only</small>
+                                    <small class="text-muted">(e.g., 012-3456789)</small>
                                 </div>
-                                
+
                                 <div class="mb-3">
                                     <label for="address" class="form-label">Address</label>
                                     <div class="input-group">
@@ -151,16 +153,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                     <small class="text-muted">Optional - Your full address</small>
                                 </div>
-                                
+
                                 <div class="d-grid gap-2 mt-4">
                                     <button type="submit" class="btn btn-success btn-lg">
                                         <i class="fas fa-user-plus me-2"></i>Register
                                     </button>
                                 </div>
                             </form>
-                            
+
                             <div class="text-center mt-3">
-                                <p class="mb-0">Already have an account? 
+                                <p class="mb-0">Already have an account?
                                     <a href="login.php" class="text-success">
                                         <i class="fas fa-sign-in-alt me-1"></i>Login here
                                     </a>
@@ -176,4 +178,5 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <!-- Bootstrap JS Bundle with Popper -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
+
 </html>

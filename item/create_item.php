@@ -28,24 +28,26 @@ if (!in_array($type, $allowedTypes)) {
 // Validate image upload
 $imageUpload = $_FILES['image'] ?? null;
 if (!$imageUpload || $imageUpload['error'] !== UPLOAD_ERR_OK) {
-    $errors[] = 'UploadError';
+    $errors[] = 'Image upload failed. Please select a valid image file.';
 } else {
     // Check if the file is an actual image and get MIME type
     $imageInfo = getimagesize($imageUpload['tmp_name']);
     $allowedMimeTypes = ['image/jpeg', 'image/png'];
-    if ($imageInfo === false || !in_array($imageInfo['mime'], $allowedMimeTypes)) {
-        $errors[] = 'UploadError';
+    if ($imageInfo === false) {
+        $errors[] = 'The uploaded file is not a valid image.';
+    } elseif (!in_array($imageInfo['mime'], $allowedMimeTypes)) {
+        $errors[] = 'Only JPEG and PNG image formats are allowed.';
     }
 
     // Check file size (max 2MB)
     if ($imageUpload['size'] > 2000000) {
-        $errors[] = 'UploadError';
+        $errors[] = 'Image size must not exceed 2MB.';
     }
 
     // Allow certain file extensions
     $imageFileType = strtolower(pathinfo($imageUpload['name'], PATHINFO_EXTENSION));
     if (!in_array($imageFileType, ['jpg', 'jpeg', 'png'])) {
-        $errors[] = 'UploadError';
+        $errors[] = 'Only JPG, JPEG, and PNG file extensions are allowed.';
     }
 }
 
