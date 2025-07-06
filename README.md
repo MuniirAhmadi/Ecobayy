@@ -11,7 +11,7 @@
 
 1. **Download the Project**
    ```bash
-   git clone https://github.com/MuniirAhmadi/ecobay-unsecure.git
+   git clone https://github.com/MuniirAhmadi/ecobay-secure.git
    ```
    *or*  
    Download the ZIP and extract to `htdocs` (XAMPP).
@@ -34,7 +34,7 @@
    ```
 
 4. **Launch the Application**
-   - Start Apache/MySQL in XAMPP
+   - Start Apache and MySQL in XAMPP
    - Access in browser:
      ```
      http://localhost/ecobay-secure
