@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jun 27, 2025 at 09:08 PM
+-- Generation Time: Jul 06, 2025 at 03:28 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -42,13 +42,6 @@ CREATE TABLE `items` (
   `pickup_date` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
---
--- Dumping data for table `items`
---
-
-INSERT INTO `items` (`id`, `user_id`, `name`, `type`, `image_path`, `description`, `status`, `created_at`, `updated_at`, `admin_id`, `points_earned`, `pickup_date`) VALUES
-(15, 5, 'Old Books', 'Paper', '../uploads/items/item_685eebdc639dc2.92940482.jpg', '40+ Books', 'Sold', '2025-06-27 19:07:08', '2025-06-27 19:07:38', 6, 20, '2025-06-27 16:00:00');
-
 -- --------------------------------------------------------
 
 --
@@ -75,7 +68,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `first_name`, `last_name`, `address`, `phone`, `eco_points`, `created_at`, `updated_at`, `is_admin`) VALUES
-(5, 'Ahmad', 'Ahmad@gmail.com', '$2y$10$.3oUnZbyDCOnXl6CWKtmCuKm9sA6IYjFb.xNqkJEHCO1SBMNpEOUi', 'Ahmad', 'Ali', 'No. 12, Jalan Meranti 3, Taman Sri Muda, 40400 Shah Alam, Selangor', '01164063363', 20, '2025-06-27 17:52:22', '2025-06-27 19:07:38', 0),
+(5, 'Ahmad', 'Ahmad@gmail.com', '$2y$10$.3oUnZbyDCOnXl6CWKtmCuKm9sA6IYjFb.xNqkJEHCO1SBMNpEOUi', 'Ahmad', 'Ali', 'No. 12, Jalan Meranti 3, Taman Sri Muda, 40400 Shah Alam, Selangor', '01164063363', 30, '2025-06-27 17:52:22', '2025-07-03 03:55:46', 0),
 (6, 'Admin', 'Admin@ecobay.com', '$2y$10$EH3rAVGZDmPM6qifIdG.neCpSgT8L2xu1qIu/rE7.cQ1C4Vo1QFyW', 'Admin', 'Ecobay', '23A, Jalan Tanjung 5, Bandar Puteri, 41200 Klang, Selangor', '0122612369', 0, '2025-06-27 17:53:24', '2025-06-27 17:55:22', 1);
 
 --
@@ -106,7 +99,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `users`
