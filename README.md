@@ -18,7 +18,7 @@
 
 2. **Database Setup**
    - Open `phpMyAdmin` (http://localhost/phpmyadmin)
-   - Create a new database: `ecobay`
+   - Create a new database: `ecobayy`
    - Import the SQL file:
      ```sql
      source ecobay-secure/ecobayy.sql
@@ -30,7 +30,7 @@
    define('DB_HOST', 'localhost');
    define('DB_USER', 'root');      // Default XAMPP username
    define('DB_PASS', '');          // Default XAMPP password
-   define('DB_NAME', 'ecobay');
+   define('DB_NAME', 'ecobayy');
    ```
 
 4. **Launch the Application**
